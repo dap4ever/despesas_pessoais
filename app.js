@@ -41,6 +41,28 @@ class Bd {
 
         localStorage.setItem('id', id)
     }
+
+    recuperarTodosRegistro() {
+        //array despesas
+        let despesas = Array()
+
+        let id = localStorage.getItem('id')
+
+        //recuperar todas as despesas cadastradas em localStore
+        for (let i = 1; i <= id; i++) {
+            //recuperar a despesa
+            let despesa = JSON.parse(localStorage.getItem(i))
+            //existe a possibilidade de haver indices que foram pulados/removidos
+            //nestes casos nós vamos pular esses índices
+            if (despesa === null) {
+                continue
+            }
+            despesas.push(despesa)
+        }
+        
+        return despesas
+
+    }
 }
 
 let bd = new Bd()
@@ -64,12 +86,13 @@ function cadastrarDespesa() {
     )
     if (despesa.validarDados()) {
         bd.gravar(despesa)
+        // dialog de sucesso
         document.getElementById('modal_titulo').innerHTML = 'Registro inserido com sucesso!'
         document.getElementById('modal_titulo_div').className = 'modal-header text-sucess'
         document.getElementById('modal_conteudo').innerHTML = 'Sua despesa foi gravada com sucesso!'
         document.getElementById('modal_btn').innerHTML = 'Voltar'
         document.getElementById('modal_btn').className = 'btn btn-success'
-        // dialog de sucesso
+
         $('#modalRegistraDespesas').modal('show')
 
     } else {
@@ -82,4 +105,10 @@ function cadastrarDespesa() {
 
         $('#modalRegistraDespesas').modal('show')
     }
+}
+
+function carregaListaDespesas() {
+    let despesas = Array
+    despesas = bd.recuperarTodosRegistro()
+    console.log(despesas)
 }
